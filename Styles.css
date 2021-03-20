@@ -1,0 +1,175 @@
+.start{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center; 
+    background-image: url("fondo.jpg");
+    
+}
+
+.title{
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: "	Copperplate";
+    font-size: 20px;
+    padding: 60px;
+}
+
+.play{
+    transition-duration: 0.4s;
+    border-radius:  12px;
+    font-size: 20px;
+    padding: 10px 30px;
+    border-color: green;
+    margin: 30px;
+}
+
+.play:hover{
+    background-color: green;
+    color: white
+}
+
+.menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 60px;;
+}
+
+.dificulty{
+    padding: 20px;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.dificultyW{
+    height: 25px;;
+    margin: 20px;
+    border-radius: 30px;
+    width: 200px;
+}
+
+.dificultyH{
+    height: 25px;
+    margin: 20px;
+    border-radius: 30px;
+    width: 200px;
+}
+
+.easy{
+    background-color: burlywood;
+    border-radius:  4px;
+    font-size: 20px;
+    padding: 10px 30px;
+    margin: 20px;
+}
+
+.medium{
+    background-color: burlywood;
+    border-radius:  4px;
+    font-size: 20px;
+    padding: 10px 30px;
+    margin: 20px;
+}
+
+.hard{
+    background-color: burlywood;
+    border-radius:  4px;
+    font-size: 20px;
+    padding: 10px 30px;
+    margin: 20px;
+}
+
+.mazeDisplay{
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.walls{
+    background-image: url("ParedesSpriteEquinas.jpg");
+    background-size: contain;
+    background-repeat: round;
+}
+
+.empty{
+    background-image: url("ParedesSpriteEmpty.jpg");
+}
+
+.back{
+    background-image: url("ParedesSpriteEmpty.jpg");
+    background-size: contain;
+    background-repeat: inherit;
+    height: 100%;
+}
+
+.goal{
+    background-image: url("https://66.media.tumblr.com/tumblr_m9wk2ozqr81rfjowdo1_500.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+
+}
+
+.playerAbajo{
+    background-image: url("flashAbajo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.playerArriba{
+    background-image: url("flashArriba.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.playerIzquierda{
+    background-image: url("flashIzquierda.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.playerDerecha{
+    background-image: url("flashDerecha.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.vacio{
+    background-color: rgb(0,0,0,0);
+}
+
+.finalScreen{
+    background-image: url("http://s3-ap-southeast-2.amazonaws.com/fna-wordpress-website10/wp-content/uploads/2016/06/05092806/FOX8_TheFlash_LightningThrow.gif");
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-size: cover;
+    color: white;
+}
+
+.restartGame{
+    transition-duration: 0.4s;
+    border-radius:  12px;
+    font-size: 20px;
+    padding: 10px 30px;
+    border-color: yellow;
+    margin: 30px
+}
+
+.restartGame:hover{
+    background-color: yellow;
+    color: white
+}
+
+.prueba{
+    background-image: url("MazeBackground.jpeg");
+}

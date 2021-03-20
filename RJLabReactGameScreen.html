@@ -1,0 +1,209 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="Styles.css"></link>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="text/babel">
+            const htmlRoot = document.getElementById('root')
+            const TitlePage = ({ headTitle, frase }) => (
+              <div className="title">
+                <h1>{headTitle}</h1>
+                <h2>{frase}</h2>
+              </div>
+            )
+            const FinalPage = ({ numM, setRestart }) => (
+              <div className="finalScreen">
+                <h1>
+                  Lograste salir del laberinto ¡Felicidades Flash!
+                </h1>
+                <h1>
+                  Ganaste el juego con:
+                  {numM}
+                  movimientos ¡sigue asi!
+                </h1>
+                <button className="restartGame" type="button" onClick={() => setRestart(0)}>Restart</button>
+              </div>
+            )
+
+            const Player = ({ position, directionPlayer }) => {
+              const { x, y } = position
+              const playerStyle = {
+                gridColumnStart: `${x + 1}`,
+                gridRowStart: `${y + 1}`,
+              }
+              if (directionPlayer === 0) { return (<div style={playerStyle} className="playerAbajo" />) }
+              if (directionPlayer === 1) { return (<div style={playerStyle} className="playerIzquierda" />) }
+              if (directionPlayer === 2) { return (<div style={playerStyle} className="playerDerecha" />) }
+              return (<div style={playerStyle} className="playerArriba" />)
+            }
+
+            const Wall = () => (<div className="walls" />)
+            const Empty = () => (<div className="empty" />)
+            const Goal = () => (<div className="goal" />)
+            const Menu = (props) => (
+              <div className="menu">
+                <div className="dificulty">
+                  <select className="dificultyW" type="number" onChange={(e) => { props.changeW(e.target.value) }}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                  </select>
+                  <select className="dificultyH" type="number" onChange={(e) => { props.changeH(e.target.value) }}>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                  </select>
+                </div>
+                <button className="play" type="button" onClick={() => props.changeS(1)}>Play</button>
+              </div>
+            )
+
+            const Mazeg = ({
+              w, h, changeS, changeD, directionMaze, changeNM, NM,
+            }) => {
+              const [mazeData, setMazeData] = React.useState([])
+              const [pos, setPosition] = React.useState({ x: 1, y: 1 })
+              const laberintoRef = React.useRef()
+
+              React.useEffect(() => {
+                fetch(`http://ubeje.xyz:3001/?type=json&w=${w}&h=${h}`)
+                  .then((r) => r.json())
+                  .then((r) => {
+                    setMazeData(r)
+                    laberintoRef.current.focus()
+                  })
+              }, [])
+              const mazeStyle = {
+                display: 'grid',
+                position: 'absolute',
+                top: '0',
+                width: '100%',
+                minHeight: '100vh',
+                left: '0',
+                gridTemplateRow: `repeat( ${h * 2}, auto)`,
+                gridTemplateColumns: `repeat( ${w * 3 + 1}, auto )`,
+              }
+
+              const handleKeyDown = (event) => {
+                if (event.key === 'ArrowLeft') {
+                  if (mazeData[pos.y][pos.x - 1] === 'g') return changeS(2)
+                  changeD(1)
+                  setPosition((pos1) => {
+                    if (mazeData[pos1.y][pos1.x - 1] === ' ' || mazeData[pos1.y][pos1.x - 1] === 'p') {
+                      changeNM(NM + 1)
+                      return { ...pos1, x: pos1.x - 1 }
+                    }
+                    return { ...pos1 }
+                  })
+                }
+                if (event.key === 'ArrowRight') {
+                  if (mazeData[pos.y][pos.x + 1] === 'g') { return changeS(2) }
+                  changeD(2)
+                  setPosition((pos2) => {
+                    if (mazeData[pos2.y][pos2.x + 1] === ' ' || mazeData[pos2.y][pos2.x + 1] === 'p') {
+                      changeNM(NM + 1)
+                      return { ...pos2, x: pos2.x + 1 }
+                    }
+                    return { ...pos2 }
+                  })
+                }
+                if (event.key === 'ArrowUp') {
+                  if (mazeData[pos.y - 1][pos.x] === 'g') { return changeS(2) }
+                  changeD(4)
+                  setPosition((pos3) => {
+                    if (mazeData[pos3.y - 1][pos3.x] === ' ' || mazeData[pos3.y - 1][pos3.x] === 'p') {
+                      changeNM(NM + 1)
+                      return { ...pos3, y: pos3.y - 1 }
+                    }
+                    return { ...pos3 }
+                  })
+                }
+                if (event.key === 'ArrowDown') {
+                  if (mazeData[pos.y + 1][pos.x] === 'g') return changeS(2)
+                  changeD(0)
+                  setPosition((pos4) => {
+                    if (mazeData[pos4.y + 1][pos4.x] === ' ' || mazeData[pos4.y + 1][pos4.x] === 'p') {
+                      changeNM(NM + 1)
+                      return { ...pos4, y: pos4.y + 1 }
+                    }
+                    return { ...pos4 }
+                  })
+                }
+                return { }
+              }
+
+              return (
+                <div className="back">
+                  <div style={mazeStyle}>
+                    { mazeData.map((row) => row.map((cell) => {
+                      switch (cell) {
+                        case 'p':
+                          return <Empty />
+                        case ' ':
+                          return <Empty />
+                        case 'g':
+                          return <Goal />
+                        default:
+                          return <Wall />
+                      }
+                    }))}
+                  </div>
+                  <div tabIndex="0" role="button" style={mazeStyle} onKeyDown={handleKeyDown} ref={laberintoRef}>
+                    { mazeData.map((row) => row.map((cell) => {
+                      if (cell === 'p') return <Player position={pos} directionPlayer={directionMaze} />
+                      return <div className="vacio" />
+                    }))}
+                  </div>
+                </div>
+              )
+            }
+
+            const App = () => {
+              const [screen, setScreen] = React.useState(0)
+              const [width, setWidth] = React.useState(5)
+              const [height, setHeight] = React.useState(5)
+              const [direction, setDirection] = React.useState(0)
+              const [numMovimientos, setNumMovimientos] = React.useState(0)
+
+              if (screen === 0) {
+                return (
+                  <div className="start">
+                    <TitlePage headTitle="Maze Challenge" frase="¿Crees que tiene lo que se requiere para superar este reto?" />
+                    <Menu changeW={setWidth} changeH={setHeight} changeS={setScreen} />
+                  </div>
+                )
+              }
+              if (screen === 1) {
+                return (
+                  <Mazeg
+                    w={width}
+                    h={height}
+                    changeS={setScreen}
+                    changeD={setDirection}
+                    directionMaze={direction}
+                    changeNM={setNumMovimientos}
+                    NM={numMovimientos}
+                  />
+                )
+              }
+              return (
+                <FinalPage numM={numMovimientos} setRestart={setScreen} />
+              )
+            }
+
+            ReactDOM.render(
+              <App />,
+              htmlRoot,
+            )
+        </script>
+    </body>
+</html>
