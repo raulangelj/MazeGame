@@ -31,4 +31,4 @@ module.exports = {
     // eslint-disable-next-line quote-props
     'ReactDOM': 'readonly',
   },
-};
+}
